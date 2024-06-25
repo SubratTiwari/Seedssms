@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Number Submission</title>
+    <link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="SEEDS_Logo X5_01.jpg" alt="Logo">
+        </div>
+        <h2>Submit Mobile Number</h2>
+        <form id="mobileForm">
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="text" id="mobileNumber" name="mobileNumber" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="response"></div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+        document.getElementById('mobileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const mobileNumber = document.getElementById('mobileNumber').value;
+            const ukey = 'CtwPQ7bNDBYBDU4298lhuco5h';
+            const language = 2;
+            const credittype = 8;
+            const senderid = 'SeedsF';
+            const templateid = 0;
+            const message = '%E0%A4%B8%E0%A5%80%E0%A4%A1%E0%A5%8D%E0%A4%B8%20%E0%A4%AB%E0%A4%BF%E0%A4%A8%E0%A4%95%E0%A5%88%E0%A4%AA%20%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%BE%E0%A4%87%E0%A4%B5%E0%A5%87%E0%A4%9F%20%E0%A4%B2%E0%A4%BF%E0%A4%AE%E0%A4%BF%E0%A4%9F%E0%A5%87%E0%A4%A1%20%E0%A4%B8%E0%A5%87%20%E0%A4%B2%E0%A5%8B%E0%A4%A8%20%E0%A4%95%E0%A5%80%20%E0%A4%87%E0%A4%95%E0%A5%8D%E0%A4%9B%E0%A4%BE%20%E0%A4%9C%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%B0%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A5%87%20%E0%A4%95%E0%A5%87%20%E0%A4%B2%E0%A4%BF%E0%A4%8F%20%E0%A4%A7%E0%A4%A8%E0%A5%8D%E0%A4%AF%E0%A4%B5%E0%A4%BE%E0%A4%A6%2C%20%E0%A4%B2%E0%A5%8B%E0%A4%A8%20%E0%A4%95%E0%A5%80%20%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%95%E0%A5%8D%E0%A4%B0%E0%A4%BF%E0%A4%AF%E0%A4%BE%20%E0%A4%95%E0%A5%8B%20%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%BE%E0%A4%B0%E0%A4%AE%E0%A5%8D%E0%A4%AD%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A5%87%20%E0%A4%95%E0%A5%87%20%E0%A4%B2%E0%A4%BF%E0%A4%8F%2C%20%E0%A4%A8%E0%A5%80%E0%A4%9A%E0%A5%87%20%E0%A4%A6%E0%A4%BF%E0%A4%AF%E0%A5%87%20%E0%A4%97%E0%A4%8F%20%E0%A4%B2%E0%A4%BF%E0%A4%82%E0%A4%95%20%E0%A4%AA%E0%A4%B0%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A5%80%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%B8%E0%A4%BE%E0%A4%9D%E0%A4%BE%20%E0%A4%95%E0%A4%B0%E0%A5%87%20%7C%20https%3A%2F%2Fforms.gle%2FD3kaAbQejaXbXytJ6';
+            const filetype = 2;
+
+            const apiUrl = `http://125.16.147.178/VoicenSMS/webresources/CreateSMSCampaignGet?ukey=${ukey}&msisdn=${mobileNumber}&language=${language}&credittype=${credittype}&senderid=${senderid}&templateid=${templateid}&message=${encodeURIComponent(message)}&filetype=${filetype}`;
+
+            console.log('Sending request to:', apiUrl);
+
+            fetch(apiUrl, {
+                method: 'GET',
+            })
+            .then(response => {
+                console.log('Received response:', response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                document.getElementById('response').innerText = 'Response: ' + JSON.stringify(data);
+                showToast('Message sent successfully!', 'success');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                document.getElementById('response').innerText = 'Error: ' + error;
+                showToast('Failed to send message!', 'error');
+            });
+        });
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.className = `show ${type}`;
+            setTimeout(() => {
+                toast.className = toast.className.replace(`show ${type}`, '');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
